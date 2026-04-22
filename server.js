@@ -63,5 +63,11 @@ app.delete("/transactions/:id", async (req, res) => {
   res.json({ success: true });
 });
 
+// verify database working
+app.get("/debug", async (req, res) => {
+  const result = await pool.query("SELECT * FROM transactions");
+  res.json(result.rows);
+});
+
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 
