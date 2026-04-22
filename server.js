@@ -31,7 +31,6 @@ const initDB = async () => {
 
 initDB();
 
-
 app.get('/health', (req, res) => {
   res.send(`${APP_NAME} up. Server live.`)
 })
@@ -52,6 +51,27 @@ app.post("/transactions", async (req, res) => {
   );
 
   res.json(result.rows[0]);
+});
+
+// edit records
+app.put("/transactions/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { name, amount, type, date } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE transactions
+       SET name = $1, amount = $2, type = $3, date = $4
+       WHERE id = $5
+       RETURNING *`,
+      [name, amount, type, date, id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Update failed" });
+  }
 });
 
 // DELETE transaction
