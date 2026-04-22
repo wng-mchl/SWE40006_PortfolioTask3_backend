@@ -1,5 +1,8 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
+const APP_NAME = process.env.APP_NAME || "Finance API"; 
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(cors());
@@ -8,7 +11,7 @@ app.use(express.json());
 let transactions = []; // temporary storage
 
 app.get('/health', (req, res) => {
-  res.send('Finances up. Server live.')
+  res.send(`${APP_NAME} up. Server live.`)
 })
 
 // GET all transactions
@@ -30,6 +33,5 @@ app.delete("/transactions/:id", (req, res) => {
   res.json({ success: true });
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 
